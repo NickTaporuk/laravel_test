@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,12 +10,23 @@
 |
 */
 
-/*Route::get('/', function () {
-    $people = ['Taylor', 'Matt', 'Jeffrey'];
-    return view('welcome', compact('people'));
-});*/
-Route::get('/','PagesController@home');
+//Route::get('/','PagesController@home');
+//
+//Route::get('about', function(){
+//    return view('pages.about');
+//});
+Route::group(['middleware' => 'web'], function () {
+    Auth::routes();
 
-Route::get('about', function(){
-    return view('pages.about');
+    Route::get('/home', 'HomeController@index')/*->middleware('auth')*/;
+//Cards
+    Route::get('cards', 'CardsController@index');
+    Route::get('cards/{card}', 'CardsController@show');
+    Route::get('cards/insertform', 'CardsController@insertform');
+    Route::get('cards/store', 'CardsController@store');
+
+//Notes
+    Route::post('cards/{card}/notes', 'NotesController@store');
+    Route::get('notes/{note}/edit', 'NotesController@edit');
+    Route::patch('notes/{note}', 'NotesController@update');
 });
